@@ -1,6 +1,6 @@
-package com.github.danielway.intellijagnostic.services
+package com.danielway.agnostic.services
 
-import com.github.danielway.intellijagnostic.MyBundle
+import com.danielway.agnostic.MyBundle
 
 class MyApplicationService {
 

@@ -1,4 +1,4 @@
-package com.github.danielway.intellijagnostic
+package com.danielway.agnostic
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls

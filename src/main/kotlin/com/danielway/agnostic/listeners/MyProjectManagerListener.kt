@@ -1,9 +1,9 @@
-package com.github.danielway.intellijagnostic.listeners
+package com.danielway.agnostic.listeners
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.github.danielway.intellijagnostic.services.MyProjectService
+import com.danielway.agnostic.services.MyProjectService
 
 internal class MyProjectManagerListener : ProjectManagerListener {
 

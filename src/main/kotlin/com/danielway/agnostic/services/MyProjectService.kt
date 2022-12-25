@@ -1,7 +1,7 @@
-package com.github.danielway.intellijagnostic.services
+package com.danielway.agnostic.services
 
 import com.intellij.openapi.project.Project
-import com.github.danielway.intellijagnostic.MyBundle
+import com.danielway.agnostic.MyBundle
 
 class MyProjectService(project: Project) {
 

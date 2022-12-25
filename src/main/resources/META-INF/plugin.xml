@@ -1,18 +1,18 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.danielway.intellijagnostic</id>
-    <name>IntelliJ Platform Plugin intellij-agnostic</name>
-    <vendor>danielway</vendor>
+    <id>com.danielway.agnostic</id>
+    <name>Agnostic</name>
+    <vendor email="projects@danieldway.com" url="danieldway.com">Daniel Way</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.danielway.intellijagnostic.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.danielway.intellijagnostic.services.MyProjectService"/>
+        <applicationService serviceImplementation="com.danielway.agnostic.services.MyApplicationService"/>
+        <projectService serviceImplementation="com.danielway.agnostic.services.MyProjectService"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.danielway.intellijagnostic.listeners.MyProjectManagerListener"
+        <listener class="com.danielway.agnostic.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 </idea-plugin>
