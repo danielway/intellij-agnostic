@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.danielway.intellijagnostic.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.danielway.intellijagnostic.MyBundle
 
 class MyApplicationService {
 
