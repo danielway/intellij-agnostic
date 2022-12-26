@@ -14,7 +14,12 @@
                 implementationClass="org.intellij.sdk.language.AgnosticFileType"
                 fieldName="INSTANCE"
                 language="Agnostic"
-                extensions="agn"/>
+                extensions="agn"
+        />
+        <lang.parserDefinition
+                language="Agnostic"
+                implementationClass="org.intellij.sdk.language.psi.AgnosticParserDefinition"
+        />
     </extensions>
 
     <applicationListeners>
