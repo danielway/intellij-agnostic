@@ -9,6 +9,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.danielway.agnostic.services.MyApplicationService"/>
         <projectService serviceImplementation="com.danielway.agnostic.services.MyProjectService"/>
+        <fileType
+                name="Agnostic File"
+                implementationClass="org.intellij.sdk.language.AgnosticFileType"
+                fieldName="INSTANCE"
+                language="Agnostic"
+                extensions="agnostic"/>
     </extensions>
 
     <applicationListeners>
