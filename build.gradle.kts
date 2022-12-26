@@ -1,6 +1,8 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 
+sourceSets["main"].java.srcDirs("src/main/gen")
+
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
