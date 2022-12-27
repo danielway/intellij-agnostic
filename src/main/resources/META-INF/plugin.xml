@@ -20,6 +20,10 @@
                 language="Agnostic"
                 implementationClass="org.intellij.sdk.language.psi.AgnosticParserDefinition"
         />
+        <lang.syntaxHighlighterFactory
+                language="Agnostic"
+                implementationClass="org.intellij.sdk.language.AgnosticSyntaxHighlighterFactory"
+        />
     </extensions>
 
     <applicationListeners>
