@@ -24,6 +24,9 @@
                 language="Agnostic"
                 implementationClass="org.intellij.sdk.language.AgnosticSyntaxHighlighterFactory"
         />
+        <colorSettingsPage
+                implementation="org.intellij.sdk.language.AgnosticColorSettingsPage"
+        />
     </extensions>
 
     <applicationListeners>
