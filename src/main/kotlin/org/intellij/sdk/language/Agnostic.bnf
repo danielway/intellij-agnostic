@@ -104,5 +104,5 @@ conditional_operator ::= '<' | '>' | '<=' | '>=' | '==' | '!='
 
 function_name ::= identifier
 return_type ::= type
-type ::= identifier
+type ::= identifier ('<' type '>')?
 identifier ::= id
