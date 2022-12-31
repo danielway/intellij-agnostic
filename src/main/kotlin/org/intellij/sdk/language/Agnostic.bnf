@@ -28,10 +28,13 @@
 file ::= top_level_declaration *
 
 private top_level_declaration ::=
-    module_declaration
+    constant_declaration
+  | module_declaration
   | function_declaration
 
 module_declaration ::= 'module' identifier ';'?
+
+constant_declaration ::= 'const' assign_expr ';'
 
 function_declaration ::= function_name params_declaration (':' return_type)? '{' statements '}' { pin=2 }
 
