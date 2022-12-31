@@ -1,45 +1,47 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.intellij.sdk.language;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import org.intellij.sdk.language.psi.AgnosticTypes;
-import com.intellij.psi.TokenType;
+
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
+import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static org.intellij.sdk.language.psi.AgnosticTypes.*;
 
 %%
 
+%{
+  public AgnosticLexer() {
+    this((java.io.Reader)null);
+  }
+%}
+
+%public
 %class AgnosticLexer
 %implements FlexLexer
-%unicode
 %function advance
 %type IElementType
-%eof{  return;
-%eof}
+%unicode
 
-CRLF=\R
-WHITE_SPACE=[\ \n\t\f]
-FIRST_VALUE_CHARACTER=[^ \n\f\\] | "\\"{CRLF} | "\\".
-VALUE_CHARACTER=[^\n\f\\] | "\\"{CRLF} | "\\".
-END_OF_LINE_COMMENT=("#"|"!")[^\r\n]*
-SEPARATOR=[:=]
-KEY_CHARACTER=[^:=\ \n\t\f\\] | "\\ "
+EOL=\R
+WHITE_SPACE=\s+
 
-%state WAITING_VALUE
+SPACE=[ \t\n\x0B\f\r]+
+COMMENT="//".*
+ID=[:letter:][a-zA-Z_0-9]*
+NUMBER=[0-9]+(\.[0-9]*)?
+STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 
 %%
+<YYINITIAL> {
+  {WHITE_SPACE}      { return WHITE_SPACE; }
 
-<YYINITIAL> {END_OF_LINE_COMMENT}                           { yybegin(YYINITIAL); return AgnosticTypes.COMMENT; }
 
-<YYINITIAL> {KEY_CHARACTER}+                                { yybegin(YYINITIAL); return AgnosticTypes.KEY; }
+  {SPACE}            { return SPACE; }
+  {COMMENT}          { return COMMENT; }
+  {ID}               { return ID; }
+  {NUMBER}           { return NUMBER; }
+  {STRING}           { return STRING; }
 
-<YYINITIAL> {SEPARATOR}                                     { yybegin(WAITING_VALUE); return AgnosticTypes.SEPARATOR; }
+}
 
-<WAITING_VALUE> {CRLF}({CRLF}|{WHITE_SPACE})+               { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
-
-<WAITING_VALUE> {WHITE_SPACE}+                              { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE; }
-
-<WAITING_VALUE> {FIRST_VALUE_CHARACTER}{VALUE_CHARACTER}*   { yybegin(YYINITIAL); return AgnosticTypes.VALUE; }
-
-({CRLF}|{WHITE_SPACE})+                                     { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
-
-[^]                                                         { return TokenType.BAD_CHARACTER; }
+[^] { return BAD_CHARACTER; }
