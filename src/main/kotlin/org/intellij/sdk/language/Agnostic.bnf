@@ -64,6 +64,7 @@ private expr_recover ::= !(')' | ';')
 expr ::=
     declare_expr
   | assign_expr
+  | array_init_expr
   | boolean_group
   | conditional_group
   | index_expr
@@ -98,6 +99,7 @@ paren_expr ::= '(' expr ')'
 ternary_expr ::= expr '?' expr ':' expr
 index_expr ::= reference_expr '[' expr ']'
 array_expr ::= '[' expr? (',' expr)* ']'
+array_init_expr ::= 'make' '(' type ')'
 literal_expr ::= number | string
 
 prefix_operator ::= '!' | '++' | '--' | '-'
