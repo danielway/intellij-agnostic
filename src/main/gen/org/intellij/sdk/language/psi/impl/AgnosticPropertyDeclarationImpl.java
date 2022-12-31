@@ -11,14 +11,14 @@ import static org.intellij.sdk.language.psi.AgnosticTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.intellij.sdk.language.psi.*;
 
-public class AgnosticParamDeclarationImpl extends ASTWrapperPsiElement implements AgnosticParamDeclaration {
+public class AgnosticPropertyDeclarationImpl extends ASTWrapperPsiElement implements AgnosticPropertyDeclaration {
 
-  public AgnosticParamDeclarationImpl(@NotNull ASTNode node) {
+  public AgnosticPropertyDeclarationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull AgnosticVisitor visitor) {
-    visitor.visitParamDeclaration(this);
+    visitor.visitPropertyDeclaration(this);
   }
 
   @Override
@@ -34,9 +34,9 @@ public class AgnosticParamDeclarationImpl extends ASTWrapperPsiElement implement
   }
 
   @Override
-  @Nullable
+  @NotNull
   public AgnosticType getType() {
-    return findChildByClass(AgnosticType.class);
+    return findNotNullChildByClass(AgnosticType.class);
   }
 
 }

@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface AgnosticParamDeclaration extends PsiElement {
+public interface AgnosticArrayInitExpr extends AgnosticExpr {
 
   @NotNull
-  AgnosticIdentifier getIdentifier();
-
-  @Nullable
   AgnosticType getType();
 
 }

@@ -23,6 +23,10 @@ public class AgnosticVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitArrayInitExpr(@NotNull AgnosticArrayInitExpr o) {
+    visitExpr(o);
+  }
+
   public void visitAssignExpr(@NotNull AgnosticAssignExpr o) {
     visitExpr(o);
   }
@@ -52,6 +56,10 @@ public class AgnosticVisitor extends PsiElementVisitor {
   }
 
   public void visitConditionalOperator(@NotNull AgnosticConditionalOperator o) {
+    visitPsiElement(o);
+  }
+
+  public void visitConstantDeclaration(@NotNull AgnosticConstantDeclaration o) {
     visitPsiElement(o);
   }
 
@@ -111,7 +119,15 @@ public class AgnosticVisitor extends PsiElementVisitor {
     visitExpr(o);
   }
 
+  public void visitModelDeclaration(@NotNull AgnosticModelDeclaration o) {
+    visitPsiElement(o);
+  }
+
   public void visitModuleDeclaration(@NotNull AgnosticModuleDeclaration o) {
+    visitPsiElement(o);
+  }
+
+  public void visitOperatorOverloadDeclaration(@NotNull AgnosticOperatorOverloadDeclaration o) {
     visitPsiElement(o);
   }
 
@@ -135,6 +151,14 @@ public class AgnosticVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitPropertyAssignment(@NotNull AgnosticPropertyAssignment o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyDeclaration(@NotNull AgnosticPropertyDeclaration o) {
+    visitPsiElement(o);
+  }
+
   public void visitReferenceExpr(@NotNull AgnosticReferenceExpr o) {
     visitExpr(o);
   }
@@ -145,6 +169,10 @@ public class AgnosticVisitor extends PsiElementVisitor {
 
   public void visitReturnType(@NotNull AgnosticReturnType o) {
     visitPsiElement(o);
+  }
+
+  public void visitStructExpr(@NotNull AgnosticStructExpr o) {
+    visitExpr(o);
   }
 
   public void visitSuffixExpr(@NotNull AgnosticSuffixExpr o) {

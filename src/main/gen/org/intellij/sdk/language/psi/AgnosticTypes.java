@@ -12,6 +12,7 @@ public interface AgnosticTypes {
   IElementType ARITHMETIC_EXPR = new AgnosticElementType("ARITHMETIC_EXPR");
   IElementType ARITHMETIC_OPERATOR = new AgnosticElementType("ARITHMETIC_OPERATOR");
   IElementType ARRAY_EXPR = new AgnosticElementType("ARRAY_EXPR");
+  IElementType ARRAY_INIT_EXPR = new AgnosticElementType("ARRAY_INIT_EXPR");
   IElementType ASSIGNMENT_OPERATOR = new AgnosticElementType("ASSIGNMENT_OPERATOR");
   IElementType ASSIGN_EXPR = new AgnosticElementType("ASSIGN_EXPR");
   IElementType BLOCK = new AgnosticElementType("BLOCK");
@@ -20,6 +21,7 @@ public interface AgnosticTypes {
   IElementType BOOL_OR_EXPR = new AgnosticElementType("BOOL_OR_EXPR");
   IElementType CONDITIONAL_EXPR = new AgnosticElementType("CONDITIONAL_EXPR");
   IElementType CONDITIONAL_OPERATOR = new AgnosticElementType("CONDITIONAL_OPERATOR");
+  IElementType CONSTANT_DECLARATION = new AgnosticElementType("CONSTANT_DECLARATION");
   IElementType DECLARE_EXPR = new AgnosticElementType("DECLARE_EXPR");
   IElementType EXPR = new AgnosticElementType("EXPR");
   IElementType EXPRESSION_STATEMENT = new AgnosticElementType("EXPRESSION_STATEMENT");
@@ -34,15 +36,20 @@ public interface AgnosticTypes {
   IElementType INDEX_EXPR = new AgnosticElementType("INDEX_EXPR");
   IElementType INVOCATION_EXPR = new AgnosticElementType("INVOCATION_EXPR");
   IElementType LITERAL_EXPR = new AgnosticElementType("LITERAL_EXPR");
+  IElementType MODEL_DECLARATION = new AgnosticElementType("MODEL_DECLARATION");
   IElementType MODULE_DECLARATION = new AgnosticElementType("MODULE_DECLARATION");
+  IElementType OPERATOR_OVERLOAD_DECLARATION = new AgnosticElementType("OPERATOR_OVERLOAD_DECLARATION");
   IElementType PARAMS_DECLARATION = new AgnosticElementType("PARAMS_DECLARATION");
   IElementType PARAM_DECLARATION = new AgnosticElementType("PARAM_DECLARATION");
   IElementType PAREN_EXPR = new AgnosticElementType("PAREN_EXPR");
   IElementType PREFIX_EXPR = new AgnosticElementType("PREFIX_EXPR");
   IElementType PREFIX_OPERATOR = new AgnosticElementType("PREFIX_OPERATOR");
+  IElementType PROPERTY_ASSIGNMENT = new AgnosticElementType("PROPERTY_ASSIGNMENT");
+  IElementType PROPERTY_DECLARATION = new AgnosticElementType("PROPERTY_DECLARATION");
   IElementType REFERENCE_EXPR = new AgnosticElementType("REFERENCE_EXPR");
   IElementType RETURN_STATEMENT = new AgnosticElementType("RETURN_STATEMENT");
   IElementType RETURN_TYPE = new AgnosticElementType("RETURN_TYPE");
+  IElementType STRUCT_EXPR = new AgnosticElementType("STRUCT_EXPR");
   IElementType SUFFIX_EXPR = new AgnosticElementType("SUFFIX_EXPR");
   IElementType SUFFIX_OPERATOR = new AgnosticElementType("SUFFIX_OPERATOR");
   IElementType TERNARY_EXPR = new AgnosticElementType("TERNARY_EXPR");
@@ -68,6 +75,9 @@ public interface AgnosticTypes {
       else if (type == ARRAY_EXPR) {
         return new AgnosticArrayExprImpl(node);
       }
+      else if (type == ARRAY_INIT_EXPR) {
+        return new AgnosticArrayInitExprImpl(node);
+      }
       else if (type == ASSIGNMENT_OPERATOR) {
         return new AgnosticAssignmentOperatorImpl(node);
       }
@@ -91,6 +101,9 @@ public interface AgnosticTypes {
       }
       else if (type == CONDITIONAL_OPERATOR) {
         return new AgnosticConditionalOperatorImpl(node);
+      }
+      else if (type == CONSTANT_DECLARATION) {
+        return new AgnosticConstantDeclarationImpl(node);
       }
       else if (type == DECLARE_EXPR) {
         return new AgnosticDeclareExprImpl(node);
@@ -131,8 +144,14 @@ public interface AgnosticTypes {
       else if (type == LITERAL_EXPR) {
         return new AgnosticLiteralExprImpl(node);
       }
+      else if (type == MODEL_DECLARATION) {
+        return new AgnosticModelDeclarationImpl(node);
+      }
       else if (type == MODULE_DECLARATION) {
         return new AgnosticModuleDeclarationImpl(node);
+      }
+      else if (type == OPERATOR_OVERLOAD_DECLARATION) {
+        return new AgnosticOperatorOverloadDeclarationImpl(node);
       }
       else if (type == PARAMS_DECLARATION) {
         return new AgnosticParamsDeclarationImpl(node);
@@ -149,6 +168,12 @@ public interface AgnosticTypes {
       else if (type == PREFIX_OPERATOR) {
         return new AgnosticPrefixOperatorImpl(node);
       }
+      else if (type == PROPERTY_ASSIGNMENT) {
+        return new AgnosticPropertyAssignmentImpl(node);
+      }
+      else if (type == PROPERTY_DECLARATION) {
+        return new AgnosticPropertyDeclarationImpl(node);
+      }
       else if (type == REFERENCE_EXPR) {
         return new AgnosticReferenceExprImpl(node);
       }
@@ -157,6 +182,9 @@ public interface AgnosticTypes {
       }
       else if (type == RETURN_TYPE) {
         return new AgnosticReturnTypeImpl(node);
+      }
+      else if (type == STRUCT_EXPR) {
+        return new AgnosticStructExprImpl(node);
       }
       else if (type == SUFFIX_EXPR) {
         return new AgnosticSuffixExprImpl(node);

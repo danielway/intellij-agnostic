@@ -8,17 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.sdk.language.psi.AgnosticTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.intellij.sdk.language.psi.*;
 
-public class AgnosticParamDeclarationImpl extends ASTWrapperPsiElement implements AgnosticParamDeclaration {
+public class AgnosticStructExprImpl extends AgnosticExprImpl implements AgnosticStructExpr {
 
-  public AgnosticParamDeclarationImpl(@NotNull ASTNode node) {
+  public AgnosticStructExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull AgnosticVisitor visitor) {
-    visitor.visitParamDeclaration(this);
+    visitor.visitStructExpr(this);
   }
 
   @Override
@@ -29,14 +29,14 @@ public class AgnosticParamDeclarationImpl extends ASTWrapperPsiElement implement
 
   @Override
   @NotNull
-  public AgnosticIdentifier getIdentifier() {
-    return findNotNullChildByClass(AgnosticIdentifier.class);
+  public List<AgnosticPropertyAssignment> getPropertyAssignmentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AgnosticPropertyAssignment.class);
   }
 
   @Override
-  @Nullable
+  @NotNull
   public AgnosticType getType() {
-    return findChildByClass(AgnosticType.class);
+    return findNotNullChildByClass(AgnosticType.class);
   }
 
 }

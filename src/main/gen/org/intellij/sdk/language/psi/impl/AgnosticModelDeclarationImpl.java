@@ -11,14 +11,14 @@ import static org.intellij.sdk.language.psi.AgnosticTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.intellij.sdk.language.psi.*;
 
-public class AgnosticParamDeclarationImpl extends ASTWrapperPsiElement implements AgnosticParamDeclaration {
+public class AgnosticModelDeclarationImpl extends ASTWrapperPsiElement implements AgnosticModelDeclaration {
 
-  public AgnosticParamDeclarationImpl(@NotNull ASTNode node) {
+  public AgnosticModelDeclarationImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull AgnosticVisitor visitor) {
-    visitor.visitParamDeclaration(this);
+    visitor.visitModelDeclaration(this);
   }
 
   @Override
@@ -29,14 +29,26 @@ public class AgnosticParamDeclarationImpl extends ASTWrapperPsiElement implement
 
   @Override
   @NotNull
+  public List<AgnosticFunctionDeclaration> getFunctionDeclarationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AgnosticFunctionDeclaration.class);
+  }
+
+  @Override
+  @NotNull
   public AgnosticIdentifier getIdentifier() {
     return findNotNullChildByClass(AgnosticIdentifier.class);
   }
 
   @Override
-  @Nullable
-  public AgnosticType getType() {
-    return findChildByClass(AgnosticType.class);
+  @NotNull
+  public List<AgnosticOperatorOverloadDeclaration> getOperatorOverloadDeclarationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AgnosticOperatorOverloadDeclaration.class);
+  }
+
+  @Override
+  @NotNull
+  public List<AgnosticPropertyDeclaration> getPropertyDeclarationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, AgnosticPropertyDeclaration.class);
   }
 
 }
