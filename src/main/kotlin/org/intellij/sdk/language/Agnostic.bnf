@@ -75,7 +75,7 @@ expr ::=
 private boolean_group ::= bool_or_expr | bool_and_expr
 private conditional_group ::= ternary_expr | conditional_expr
 private arithmetic_group ::= arithmetic_expr
-private primary_group ::= simple_reference_expr | literal_expr | paren_expr // simple_reference_expr | literal | paren_expr
+private primary_group ::= simple_reference_expr | literal_expr | array_expr | paren_expr // simple_reference_expr | literal | paren_expr
 
 fake reference_expr ::= expr? '.' identifier
 simple_reference_expr ::= identifier {extends=reference_expr elementType=reference_expr}
@@ -94,6 +94,7 @@ arithmetic_expr ::= expr arithmetic_operator expr
 paren_expr ::= '(' expr ')'
 ternary_expr ::= expr '?' expr ':' expr
 index_expr ::= reference_expr '[' expr ']'
+array_expr ::= '[' expr? (',' expr)* ']'
 literal_expr ::= number | string
 
 prefix_operator ::= '!' | '++' | '--' | '-'
