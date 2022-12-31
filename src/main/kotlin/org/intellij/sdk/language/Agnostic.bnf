@@ -31,15 +31,21 @@ private top_level_declaration ::=
     constant_declaration
   | module_declaration
   | function_declaration
+  | model_declaration
 
 module_declaration ::= 'module' identifier ';'?
 
 constant_declaration ::= 'const' assign_expr ';'
 
 function_declaration ::= function_name params_declaration (':' return_type)? '{' statements '}' { pin=2 }
+operator_overload_declaration ::= ('@==' | '@hash') params_declaration (':' return_type)? '{' statements '}' { pin=2 }
 
 params_declaration ::= '(' ')' | '(' param_declaration (',' param_declaration)* ')'
-param_declaration ::= identifier ':' type
+param_declaration ::= identifier (':' type)?
+
+model_declaration ::= 'model' identifier '{' (property_declaration | function_declaration | operator_overload_declaration) * '}' { pin=2 }
+
+property_declaration ::= identifier ':' type ';'
 
 private statements ::= statement *
 private statement ::=
