@@ -47,8 +47,9 @@ private statement ::=
   | expression_statement
 
 block ::= '{' statements '}' { extraRoot=true pin=1 }
-for_statement ::= 'for' for_declaration statement { pin=1 }
-for_declaration ::= '(' (declare_expr | assign_expr) ';' conditional_group ';' expr ')'
+for_statement ::= 'for' '(' (for_in_declaration | for_tuple_declaration) ')' statement { pin=1 }
+for_in_declaration ::= declare_expr 'in' simple_reference_expr
+for_tuple_declaration ::= assign_expr ';' conditional_group ';' expr
 if_statement ::= 'if' '(' expr_with_recover ')' statement ('else' statement)? { pin=1 }
 return_statement ::= 'return' expr? ';' { pin=1 }
 
@@ -85,7 +86,7 @@ arg_list ::= '(' [ !')' expr  (',' expr) * ] ')' { pin(".*")=1 }
 prefix_expr ::= prefix_operator expr
 suffix_expr ::= expr suffix_operator
 assign_expr ::= expr assignment_operator expr { rightAssociative=true }
-declare_expr ::= 'var' identifier '=' expr
+declare_expr ::= 'var' identifier
 conditional_expr ::= expr (boolean_operator | conditional_operator) expr
 bool_or_expr ::= expr '||' expr
 bool_and_expr ::= expr '&&' expr
