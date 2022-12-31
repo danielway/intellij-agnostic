@@ -11,10 +11,97 @@
   elementTypeHolderClass="org.intellij.sdk.language.psi.AgnosticTypes"
   elementTypeClass="org.intellij.sdk.language.psi.AgnosticElementType"
   tokenTypeClass="org.intellij.sdk.language.psi.AgnosticTokenType"
+
+  extends(".*expr")=expr
+
+  tokens=[
+    space='regexp:\s+'
+    comment='regexp://.*'
+
+    id='regexp:\p{Alpha}\w*'
+
+    number='regexp:\d+(\.\d*)?'
+    string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+  ]
 }
 
-agnosticFile ::= item_*
+file ::= top_level_declaration *
 
-private item_ ::= (property|COMMENT|CRLF)
+private top_level_declaration ::=
+    module_declaration
+  | function_declaration
 
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+module_declaration ::= 'module' identifier ';'?
+
+function_declaration ::= function_name params_declaration (':' return_type)? '{' statements '}' { pin=2 }
+
+params_declaration ::= '(' ')' | '(' param_declaration (',' param_declaration)* ')'
+param_declaration ::= identifier ':' type
+
+private statements ::= statement *
+private statement ::=
+    block
+  | for_statement
+  | if_statement
+  | return_statement
+  | expression_statement
+
+block ::= '{' statements '}' { extraRoot=true pin=1 }
+for_statement ::= 'for' for_declaration statement { pin=1 }
+for_declaration ::= '(' (declare_expr | assign_expr) ';' boolean_expr ';' expr ')'
+if_statement ::= 'if' '(' expr_with_recover ')' statement ('else' statement)? { pin=1 }
+return_statement ::= 'return' expression? ';' { pin=1 }
+
+expression_statement ::= expr_with_recover ';' { pin=1 }
+
+expr_with_recover ::= expr {recoverWhile="expr_recover"}
+private expr_recover ::= !(')' | ';')
+
+expr ::=
+    declare_expr
+  | assign_expr
+  | conditional_group
+  | boolean_group
+  | index_expr
+  | prefix_expr
+  | suffix_expr
+  | arithmetic_group
+  | invocation_expr
+  | qualified_reference_expr
+  | primary_group
+{extraRoot=true}
+
+private conditional_group ::= ternary_expr | conditional_expr
+private boolean_group ::= boolean_expr
+private arithmetic_group ::= arithmetic_expr
+private primary_group ::= simple_reference_expr | literal_expr | paren_expr // simple_reference_expr | literal | paren_expr
+
+fake reference_expr ::= expr? '.' identifier
+simple_reference_expr ::= identifier {extends=reference_expr elementType=reference_expr}
+qualified_reference_expr ::= expr '.' identifier {extends=reference_expr elementType=reference_expr}
+invocation_expr ::= reference_expr arg_list
+
+arg_list ::= '(' [ !')' expr  (',' expr) * ] ')' { pin(".*")=1 }
+prefix_expr ::= prefix_operator expr
+suffix_expr ::= expr suffix_operator
+assign_expr ::= expr assignment_operator expr { rightAssociative=true }
+declare_expr ::= 'var' identifier '=' expr
+conditional_expr ::= expr conditional_operator expr
+boolean_expr ::= expr boolean_operator expr
+arithmetic_expr ::= expr arithmetic_operator expr
+paren_expr ::= '(' expr ')'
+ternary_expr ::= expr '?' expr ':' expr
+index_expr ::= reference_expr '[' expr ']'
+literal_expr ::= number | string
+
+prefix_operator ::= '!' | '++' | '--' | '-'
+suffix_operator ::= '++' | '--'
+arithmetic_operator ::= '+' | '-' | '*' | '/'
+assignment_operator ::= '=' | '+=' | '-=' | '*=' | '\='
+boolean_operator ::= '||' | '&&'
+conditional_operator ::= '<' | '>' | '<=' | '>=' | '==' | '!='
+
+function_name ::= identifier
+return_type ::= type
+type ::= identifier
+identifier ::= id
