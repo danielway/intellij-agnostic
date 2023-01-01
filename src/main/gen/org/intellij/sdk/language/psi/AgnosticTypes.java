@@ -55,9 +55,39 @@ public interface AgnosticTypes {
   IElementType TERNARY_EXPR = new AgnosticElementType("TERNARY_EXPR");
   IElementType TYPE = new AgnosticElementType("TYPE");
 
+  IElementType ANDAND = new AgnosticTokenType("&&");
+  IElementType AT = new AgnosticTokenType("@");
+  IElementType COLON = new AgnosticTokenType(":");
+  IElementType COMMA = new AgnosticTokenType(",");
   IElementType COMMENT = new AgnosticTokenType("comment");
+  IElementType DIV = new AgnosticTokenType("/");
+  IElementType DIVEQ = new AgnosticTokenType("/=");
+  IElementType DOT = new AgnosticTokenType(".");
+  IElementType EQ = new AgnosticTokenType("=");
+  IElementType EQEQ = new AgnosticTokenType("==");
+  IElementType EXCL = new AgnosticTokenType("!");
+  IElementType EXCLEQ = new AgnosticTokenType("!=");
+  IElementType GT = new AgnosticTokenType(">");
+  IElementType GTEQ = new AgnosticTokenType(">=");
   IElementType ID = new AgnosticTokenType("id");
+  IElementType LBRACE = new AgnosticTokenType("{");
+  IElementType LBRACK = new AgnosticTokenType("[");
+  IElementType LPAREN = new AgnosticTokenType("(");
+  IElementType LT = new AgnosticTokenType("<");
+  IElementType LTEQ = new AgnosticTokenType("<=");
+  IElementType MINUS = new AgnosticTokenType("-");
+  IElementType MINUSEQ = new AgnosticTokenType("-=");
+  IElementType MUL = new AgnosticTokenType("*");
+  IElementType MULEQ = new AgnosticTokenType("*=");
   IElementType NUMBER = new AgnosticTokenType("number");
+  IElementType OROR = new AgnosticTokenType("||");
+  IElementType PLUS = new AgnosticTokenType("+");
+  IElementType PLUSEQ = new AgnosticTokenType("+=");
+  IElementType RBRACE = new AgnosticTokenType("}");
+  IElementType RBRACK = new AgnosticTokenType("]");
+  IElementType RPAREN = new AgnosticTokenType(")");
+  IElementType SEMICOLON = new AgnosticTokenType(";");
+  IElementType SHA = new AgnosticTokenType("#");
   IElementType STRING = new AgnosticTokenType("string");
 
   class Factory {

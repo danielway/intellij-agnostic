@@ -57,12 +57,13 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
   // '(' [ !')' expr  (',' expr) * ] ')'
   public static boolean arg_list(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "arg_list")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ARG_LIST, "<arg list>");
-    r = consumeToken(b, "(");
+    Marker m = enter_section_(b, l, _NONE_, ARG_LIST, null);
+    r = consumeToken(b, LPAREN);
     p = r; // pin = 1
     r = r && report_error_(b, arg_list_1(b, l + 1));
-    r = p && consumeToken(b, ")") && r;
+    r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -92,7 +93,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "arg_list_1_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NOT_);
-    r = !consumeToken(b, ")");
+    r = !consumeToken(b, RPAREN);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -113,7 +114,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "arg_list_1_0_2_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, ",");
+    r = consumeToken(b, COMMA);
     p = r; // pin = 1
     r = r && expr(b, l + 1, -1);
     exit_section_(b, l, m, r, p, null);
@@ -126,10 +127,10 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "arithmetic_operator")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ARITHMETIC_OPERATOR, "<arithmetic operator>");
-    r = consumeToken(b, "+");
-    if (!r) r = consumeToken(b, "-");
-    if (!r) r = consumeToken(b, "*");
-    if (!r) r = consumeToken(b, "/");
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, MUL);
+    if (!r) r = consumeToken(b, DIV);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -140,10 +141,10 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "assignment_operator")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ASSIGNMENT_OPERATOR, "<assignment operator>");
-    r = consumeToken(b, "=");
-    if (!r) r = consumeToken(b, "+=");
-    if (!r) r = consumeToken(b, "-=");
-    if (!r) r = consumeToken(b, "*=");
+    r = consumeToken(b, EQ);
+    if (!r) r = consumeToken(b, PLUSEQ);
+    if (!r) r = consumeToken(b, MINUSEQ);
+    if (!r) r = consumeToken(b, MULEQ);
     if (!r) r = consumeToken(b, "\\=");
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -153,12 +154,13 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
   // '{' statements '}'
   public static boolean block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, BLOCK, "<block>");
-    r = consumeToken(b, "{");
+    Marker m = enter_section_(b, l, _NONE_, BLOCK, null);
+    r = consumeToken(b, LBRACE);
     p = r; // pin = 1
     r = r && report_error_(b, statements(b, l + 1));
-    r = p && consumeToken(b, "}") && r;
+    r = p && consumeToken(b, RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -167,10 +169,11 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
   // '||' | '&&'
   public static boolean boolean_operator(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "boolean_operator")) return false;
+    if (!nextTokenIs(b, "<boolean operator>", ANDAND, OROR)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, BOOLEAN_OPERATOR, "<boolean operator>");
-    r = consumeToken(b, "||");
-    if (!r) r = consumeToken(b, "&&");
+    r = consumeToken(b, OROR);
+    if (!r) r = consumeToken(b, ANDAND);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -181,12 +184,12 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "conditional_operator")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CONDITIONAL_OPERATOR, "<conditional operator>");
-    r = consumeToken(b, "<");
-    if (!r) r = consumeToken(b, ">");
-    if (!r) r = consumeToken(b, "<=");
-    if (!r) r = consumeToken(b, ">=");
-    if (!r) r = consumeToken(b, "==");
-    if (!r) r = consumeToken(b, "!=");
+    r = consumeToken(b, LT);
+    if (!r) r = consumeToken(b, GT);
+    if (!r) r = consumeToken(b, LTEQ);
+    if (!r) r = consumeToken(b, GTEQ);
+    if (!r) r = consumeToken(b, EQEQ);
+    if (!r) r = consumeToken(b, EXCLEQ);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -199,7 +202,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, CONSTANT_DECLARATION, "<constant declaration>");
     r = consumeToken(b, "const");
     r = r && expr(b, l + 1, 0);
-    r = r && consumeToken(b, ";");
+    r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -219,8 +222,8 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
   private static boolean expr_recover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expr_recover_0")) return false;
     boolean r;
-    r = consumeToken(b, ")");
-    if (!r) r = consumeToken(b, ";");
+    r = consumeToken(b, RPAREN);
+    if (!r) r = consumeToken(b, SEMICOLON);
     return r;
   }
 
@@ -243,7 +246,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, EXPRESSION_STATEMENT, "<expression statement>");
     r = expr_with_recover(b, l + 1);
     p = r; // pin = 1
-    r = r && consumeToken(b, ";");
+    r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -281,9 +284,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, FOR_STATEMENT, "<for statement>");
     r = consumeToken(b, "for");
     p = r; // pin = 1
-    r = r && report_error_(b, consumeToken(b, "("));
+    r = r && report_error_(b, consumeToken(b, LPAREN));
     r = p && report_error_(b, for_statement_2(b, l + 1)) && r;
-    r = p && report_error_(b, consumeToken(b, ")")) && r;
+    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
     r = p && statement(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -305,9 +308,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FOR_TUPLE_DECLARATION, "<for tuple declaration>");
     r = expr(b, l + 1, 0);
-    r = r && consumeToken(b, ";");
+    r = r && consumeToken(b, SEMICOLON);
     r = r && expr(b, l + 1, 3);
-    r = r && consumeToken(b, ";");
+    r = r && consumeToken(b, SEMICOLON);
     r = r && expr(b, l + 1, -1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -324,9 +327,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     r = r && params_declaration(b, l + 1);
     p = r; // pin = 2
     r = r && report_error_(b, function_declaration_2(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, "{")) && r;
+    r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
     r = p && report_error_(b, statements(b, l + 1)) && r;
-    r = p && consumeToken(b, "}") && r;
+    r = p && consumeToken(b, RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -343,7 +346,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "function_declaration_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ":");
+    r = consumeToken(b, COLON);
     r = r && return_type(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -381,9 +384,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, IF_STATEMENT, "<if statement>");
     r = consumeToken(b, "if");
     p = r; // pin = 1
-    r = r && report_error_(b, consumeToken(b, "("));
+    r = r && report_error_(b, consumeToken(b, LPAREN));
     r = p && report_error_(b, expr_with_recover(b, l + 1)) && r;
-    r = p && report_error_(b, consumeToken(b, ")")) && r;
+    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
     r = p && report_error_(b, statement(b, l + 1)) && r;
     r = p && if_statement_5(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
@@ -417,9 +420,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, "model");
     r = r && identifier(b, l + 1);
     p = r; // pin = 2
-    r = r && report_error_(b, consumeToken(b, "{"));
+    r = r && report_error_(b, consumeToken(b, LBRACE));
     r = p && report_error_(b, model_declaration_3(b, l + 1)) && r;
-    r = p && consumeToken(b, "}") && r;
+    r = p && consumeToken(b, RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -461,7 +464,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
   // ';'?
   private static boolean module_declaration_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "module_declaration_2")) return false;
-    consumeToken(b, ";");
+    consumeToken(b, SEMICOLON);
     return true;
   }
 
@@ -475,9 +478,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     r = r && params_declaration(b, l + 1);
     p = r; // pin = 2
     r = r && report_error_(b, operator_overload_declaration_2(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, "{")) && r;
+    r = p && report_error_(b, consumeToken(b, LBRACE)) && r;
     r = p && report_error_(b, statements(b, l + 1)) && r;
-    r = p && consumeToken(b, "}") && r;
+    r = p && consumeToken(b, RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -503,7 +506,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "operator_overload_declaration_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ":");
+    r = consumeToken(b, COLON);
     r = r && return_type(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -534,7 +537,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "param_declaration_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ":");
+    r = consumeToken(b, COLON);
     r = r && type(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -544,22 +547,12 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
   // '(' ')' | '(' param_declaration (',' param_declaration)* ')'
   public static boolean params_declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "params_declaration")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, PARAMS_DECLARATION, "<params declaration>");
-    r = params_declaration_0(b, l + 1);
-    if (!r) r = params_declaration_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // '(' ')'
-  private static boolean params_declaration_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "params_declaration_0")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "(");
-    r = r && consumeToken(b, ")");
-    exit_section_(b, m, null, r);
+    r = parseTokens(b, 0, LPAREN, RPAREN);
+    if (!r) r = params_declaration_1(b, l + 1);
+    exit_section_(b, m, PARAMS_DECLARATION, r);
     return r;
   }
 
@@ -568,10 +561,10 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "params_declaration_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "(");
+    r = consumeToken(b, LPAREN);
     r = r && param_declaration(b, l + 1);
     r = r && params_declaration_1_2(b, l + 1);
-    r = r && consumeToken(b, ")");
+    r = r && consumeToken(b, RPAREN);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -592,7 +585,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "params_declaration_1_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ",");
+    r = consumeToken(b, COMMA);
     r = r && param_declaration(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -604,10 +597,10 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "prefix_operator")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, PREFIX_OPERATOR, "<prefix operator>");
-    r = consumeToken(b, "!");
+    r = consumeToken(b, EXCL);
     if (!r) r = consumeToken(b, "++");
     if (!r) r = consumeToken(b, "--");
-    if (!r) r = consumeToken(b, "-");
+    if (!r) r = consumeToken(b, MINUS);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -620,7 +613,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = identifier(b, l + 1);
-    r = r && consumeToken(b, ":");
+    r = r && consumeToken(b, COLON);
     r = r && expr(b, l + 1, -1);
     r = r && property_assignment_3(b, l + 1);
     exit_section_(b, m, PROPERTY_ASSIGNMENT, r);
@@ -630,7 +623,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
   // ','?
   private static boolean property_assignment_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "property_assignment_3")) return false;
-    consumeToken(b, ",");
+    consumeToken(b, COMMA);
     return true;
   }
 
@@ -642,9 +635,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = identifier(b, l + 1);
-    r = r && consumeToken(b, ":");
+    r = r && consumeToken(b, COLON);
     r = r && type(b, l + 1);
-    r = r && consumeToken(b, ";");
+    r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, m, PROPERTY_DECLARATION, r);
     return r;
   }
@@ -658,7 +651,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, "return");
     p = r; // pin = 1
     r = r && report_error_(b, return_statement_1(b, l + 1));
-    r = p && consumeToken(b, ";") && r;
+    r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -763,9 +756,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "type_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, "<");
+    r = consumeToken(b, LT);
     r = r && type(b, l + 1);
-    r = r && consumeToken(b, ">");
+    r = r && consumeToken(b, GT);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -814,11 +807,11 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
         r = expr(b, l, 0);
         exit_section_(b, l, m, ASSIGN_EXPR, r, true, null);
       }
-      else if (g < 3 && consumeTokenSmart(b, "||")) {
+      else if (g < 3 && consumeTokenSmart(b, OROR)) {
         r = expr(b, l, 3);
         exit_section_(b, l, m, BOOL_OR_EXPR, r, true, null);
       }
-      else if (g < 3 && consumeTokenSmart(b, "&&")) {
+      else if (g < 3 && consumeTokenSmart(b, ANDAND)) {
         r = expr(b, l, 3);
         exit_section_(b, l, m, BOOL_AND_EXPR, r, true, null);
       }
@@ -831,9 +824,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
         r = expr(b, l, 4);
         exit_section_(b, l, m, CONDITIONAL_EXPR, r, true, null);
       }
-      else if (g < 5 && leftMarkerIs(b, REFERENCE_EXPR) && consumeTokenSmart(b, "[")) {
+      else if (g < 5 && leftMarkerIs(b, REFERENCE_EXPR) && consumeTokenSmart(b, LBRACK)) {
         r = report_error_(b, expr(b, l, 5));
-        r = consumeToken(b, "]") && r;
+        r = consumeToken(b, RBRACK) && r;
         exit_section_(b, l, m, INDEX_EXPR, r, true, null);
       }
       else if (g < 7 && suffix_operator(b, l + 1)) {
@@ -877,9 +870,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, ARRAY_INIT_EXPR, "<array init expr>");
     r = consumeTokenSmart(b, "make");
-    r = r && consumeToken(b, "(");
+    r = r && consumeToken(b, LPAREN);
     r = r && type(b, l + 1);
-    r = r && consumeToken(b, ")");
+    r = r && consumeToken(b, RPAREN);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -889,7 +882,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ternary_expr_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ":");
+    r = consumeToken(b, COLON);
     r = r && expr(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
@@ -920,7 +913,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "qualified_reference_expr_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, ".");
+    r = consumeTokenSmart(b, DOT);
     r = r && identifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -933,9 +926,9 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = type(b, l + 1);
-    r = r && consumeToken(b, "{");
+    r = r && consumeToken(b, LBRACE);
     r = r && struct_expr_2(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && consumeToken(b, RBRACE);
     exit_section_(b, m, STRUCT_EXPR, r);
     return r;
   }
@@ -977,13 +970,14 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
   // '[' expr? (',' expr)* ']'
   public static boolean array_expr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "array_expr")) return false;
+    if (!nextTokenIsSmart(b, LBRACK)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, ARRAY_EXPR, "<array expr>");
-    r = consumeTokenSmart(b, "[");
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LBRACK);
     r = r && array_expr_1(b, l + 1);
     r = r && array_expr_2(b, l + 1);
-    r = r && consumeToken(b, "]");
-    exit_section_(b, l, m, r, false, null);
+    r = r && consumeToken(b, RBRACK);
+    exit_section_(b, m, ARRAY_EXPR, r);
     return r;
   }
 
@@ -1010,7 +1004,7 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "array_expr_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, ",");
+    r = consumeTokenSmart(b, COMMA);
     r = r && expr(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
@@ -1018,12 +1012,13 @@ public class AgnosticParser implements PsiParser, LightPsiParser {
 
   public static boolean paren_expr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "paren_expr")) return false;
+    if (!nextTokenIsSmart(b, LPAREN)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeTokenSmart(b, "(");
+    r = consumeTokenSmart(b, LPAREN);
     p = r;
     r = p && expr(b, l, -1);
-    r = p && report_error_(b, consumeToken(b, ")")) && r;
+    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
     exit_section_(b, l, m, PAREN_EXPR, r, p, null);
     return r || p;
   }

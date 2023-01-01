@@ -35,6 +35,36 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 <YYINITIAL> {
   {WHITE_SPACE}      { return WHITE_SPACE; }
 
+  "{"                { return LBRACE; }
+  "}"                { return RBRACE; }
+  "["                { return LBRACK; }
+  "]"                { return RBRACK; }
+  "("                { return LPAREN; }
+  ")"                { return RPAREN; }
+  ":"                { return COLON; }
+  ";"                { return SEMICOLON; }
+  ","                { return COMMA; }
+  "="                { return EQ; }
+  "!="               { return EXCLEQ; }
+  "=="               { return EQEQ; }
+  "#"                { return SHA; }
+  "!"                { return EXCL; }
+  "+="               { return PLUSEQ; }
+  "+"                { return PLUS; }
+  "-="               { return MINUSEQ; }
+  "-"                { return MINUS; }
+  "&&"               { return ANDAND; }
+  "<"                { return LT; }
+  "*="               { return MULEQ; }
+  "*"                { return MUL; }
+  "/="               { return DIVEQ; }
+  "/"                { return DIV; }
+  ">"                { return GT; }
+  "."                { return DOT; }
+  "@"                { return AT; }
+  ">="               { return GTEQ; }
+  "<="               { return LTEQ; }
+  "||"               { return OROR; }
 
   {SPACE}            { return SPACE; }
   {COMMENT}          { return COMMENT; }

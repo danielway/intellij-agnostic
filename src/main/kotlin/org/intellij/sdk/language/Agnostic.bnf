@@ -22,6 +22,38 @@
 
     number='regexp:\d+(\.\d*)?'
     string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+
+    LBRACE    = '{'
+    RBRACE    = '}'
+    LBRACK    = '['
+    RBRACK    = ']'
+    LPAREN    = '('
+    RPAREN    = ')'
+    COLON     = ':'
+    SEMICOLON = ';'
+    COMMA     = ','
+    EQ        = '='
+    EXCLEQ    = '!='
+    EQEQ      = '=='
+    SHA       = '#'
+    EXCL      = '!'
+    PLUSEQ    = '+='
+    PLUS      = '+'
+    MINUSEQ   = '-='
+    MINUS     = '-'
+    ANDAND    = '&&'
+    LT        = '<'
+    MULEQ     = '*='
+    MUL       = '*'
+    DIVEQ     = '/='
+    DIV       = '/'
+    GT        = '>'
+    DOT       = '.'
+    AT        = '@'
+    GTEQ      = ">="
+    LTEQ      = "<="
+    OROR      = "||"
+    ANDAND    = "&&"
   ]
 }
 
