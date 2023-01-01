@@ -9,15 +9,15 @@ import javax.swing.Icon
 
 class AgnosticColorSettingsPage : ColorSettingsPage {
     companion object {
-        private val DESCRIPTORS = arrayOf(
-            AttributesDescriptor("Key", AgnosticSyntaxHighlighter.KEY),
-            AttributesDescriptor("Separator", AgnosticSyntaxHighlighter.SEPARATOR),
-            AttributesDescriptor("Value", AgnosticSyntaxHighlighter.VALUE),
-            AttributesDescriptor("Bad value", AgnosticSyntaxHighlighter.BAD_CHARACTER)
-        )
+//        private val DESCRIPTORS = arrayOf(
+//            AttributesDescriptor("Key", AgnosticSyntaxHighlighter.KEY),
+//            AttributesDescriptor("Separator", AgnosticSyntaxHighlighter.SEPARATOR),
+//            AttributesDescriptor("Value", AgnosticSyntaxHighlighter.VALUE),
+//            AttributesDescriptor("Bad value", AgnosticSyntaxHighlighter.BAD_CHARACTER)
+//        )
     }
 
-    override fun getAttributeDescriptors(): Array<AttributesDescriptor> = DESCRIPTORS
+    override fun getAttributeDescriptors(): Array<AttributesDescriptor> = arrayOf()
 
     override fun getColorDescriptors(): Array<ColorDescriptor> = ColorDescriptor.EMPTY_ARRAY
 
