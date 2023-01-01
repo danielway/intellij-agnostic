@@ -20,9 +20,11 @@ class AgnosticSyntaxHighlighter : SyntaxHighlighterBase() {
 
         when (tokenType) {
             AgnosticTypes.COMMENT ->
-                createTextAttributesKey("AGNOSTIC_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
+                return arrayOf(createTextAttributesKey("AGNOSTIC_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT))
             AgnosticTypes.MODULE_DECLARATION, AgnosticTypes.MODEL_DECLARATION ->
-                createTextAttributesKey("AGNOSTIC_DECLARATION", DefaultLanguageHighlighterColors.CLASS_NAME)
+                return arrayOf(createTextAttributesKey("AGNOSTIC_DECLARATION", DefaultLanguageHighlighterColors.CLASS_NAME))
+            TokenType.BAD_CHARACTER ->
+                return arrayOf(createTextAttributesKey("AGNOSTIC_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER))
         }
 
         return arrayOf()
